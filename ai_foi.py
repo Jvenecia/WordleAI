@@ -9,6 +9,7 @@ import pdb
 import random
 import utils
 
+# function to parse the word list so narrow possible choices
 def wordPurge(wordlist, guesses, feedback):
     count = 0 
     guess = guesses[len(guesses) - 1].upper()
@@ -35,30 +36,37 @@ def wordPurge(wordlist, guesses, feedback):
                 # there are some extra checks in this just to ensure that it doesn't remove more words than it should from wordlist
                 else:
                     greens_and_yellows = 0
+                    # check to make see how many times a green or yellow version of the letter appears in the word
+                    
                     for k in range(5):
                         if guess[k] == guess[j]:
                             if feedback[len(guesses) - 1][k] > 0:
                                 false_alarm = True
                                 greens_and_yellows += 1
+                    # if there is only one copy of the letter searched we just delete the word and break
                     if not false_alarm:
                         del wordlist[count]
                         deleted = True
                         break
+                    # otherwise, if the total copies of the letter is not equal to the number of green and yellow versions 
+                    # of that letter, we delete the word and break
                     elif not (total_copy == greens_and_yellows):
                         del wordlist[count]
                         deleted = True
                         break
+                    # If both of the above checks are not met we just continue to the next word
                     else:
                         continue
             elif feedback[len(guesses) - 1][j] == 1: # YELLOW letter
-                if word.count(guess[j]) == 0: # check how many times the current letter appears in the word. If none, the word is invalid therefore delet
+                if word.count(guess[j]) == 0: # check how many times the current letter appears in the word. If none, the word is invalid therefore delete
                     del wordlist[count]
                     deleted = True
                     break
                 else:
                     for k in range(5): # Loop over letters in k
-                        if k == j and word[k] == guess[j]: # if the letter at the shown index of each word is the same, check if the index is also the same, 
-                                                           # if so then delete the word from the wordlist
+                        # if the letter at the shown index of each word is the same, check if the index is also the same, 
+                        # if so then delete the word from the wordlist
+                        if k == j and word[k] == guess[j]: 
                             del wordlist[count]
                             deleted = True
                             break #
@@ -70,8 +78,9 @@ def wordPurge(wordlist, guesses, feedback):
                 else: # The letter has been found but now we need to make sure it's in the right spot
                     beans = False # flag beans to find if the letter searched is in the correct index of the current word
                     for k in range(5): # Loop over letters in k
-                        if k == j and word[k] == guess[j]: # if the letter at the shown index of each word is the same, check if the index is also the same, 
-                                                           # if so then delete the word from the wordlist
+                        # if the letter at the shown index of each word is the same, check if the index is also the same, 
+                        # if so then delete the word from the wordlist
+                        if k == j and word[k] == guess[j]: 
                             beans = True
                             break 
                     if beans == False:
